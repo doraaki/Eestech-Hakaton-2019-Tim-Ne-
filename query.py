@@ -12,7 +12,7 @@ table_service = TableService(account_name='csb61e6613152abx4a5dxbd0',account_key
 
 def get_value(measure):
 
-    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=5)).time()) + '0Z'
+    current_time = str((datetime.datetime.now()).date()) + 'T' + str((datetime.datetime.now() - datetime.timedelta(hours=1) - datetime.timedelta(seconds=5)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities=table_service.query_entities('data', filter=query_filter, num_results=1)
@@ -29,7 +29,7 @@ def make_graph(measure):
     if(measure != 'press' and measure != 'temp'):
         return None
 
-    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=100)).time()) + '0Z'
+    current_time = str((datetime.datetime.now()).date()) + 'T' + str((datetime.datetime.now() - datetime.timedelta(hours=1) - datetime.timedelta(seconds=100)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities=table_service.query_entities('data', filter=query_filter, num_results=100)
@@ -42,6 +42,7 @@ def make_graph(measure):
         Timestamps.append(entity.Timestamp)
         if(measure == 'temp'):
             Tmps.append(entity.temperature)
+
     if(measure == 'press'):
         plt.plot(Timestamps,Pressures)
         plt.savefig('static/press.png')
@@ -53,7 +54,7 @@ def get_graph(measure):
     if(measure != 'press' and measure != 'temp'):
         return None
 
-    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now() - datetime.timedelta(seconds=100)).time()) + '0Z'
+    current_time = str((datetime.datetime.now()).date()) + 'T' + str((datetime.datetime.now() - datetime.timedelta(hours=1) - datetime.timedelta(seconds=100)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities = table_service.query_entities('data', filter=query_filter, num_results=100)
@@ -66,7 +67,10 @@ def get_graph(measure):
         Timestamps.append(entity.Timestamp)
         if (measure == 'temp'):
             Tmps.append(entity.temperature)
+    print(len(Timestamps))
     if(measure == 'press'):
         return (Timestamps, Pressures)
     if(measure == 'temp'):
         return (Timestamps,Tmps)
+
+make_graph('temp')
