@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import random
@@ -9,7 +11,7 @@ import query
 from flask import Flask, render_template, make_response
 
 app = Flask(__name__)
-
+val = 1
 
 @app.route("/")
 def home():
@@ -22,11 +24,11 @@ def temperatura():
 
 @app.route("/press_data")
 def press_data():
-    return query.get_value('press')
+    return "Trenutni pritisak je {} paskala.".format(query.get_value('press'))
 
 @app.route("/temp_data")
 def temp_data():
-    return query.get_value('temp')
+    return "Trenutna temperatura je {} stepeni.".format(query.get_value('temp'))
 
 @app.route("/pritisak")
 def pritisak():
@@ -34,8 +36,10 @@ def pritisak():
 
 @app.route("/press_graph")
 def press_graph():
+    global val
+    val = val+1
     query.make_graph('press')
-    return render_template("pressure_graph.html")
+    return render_template("pressure_graph.html",val=val)
 
 @app.route('/plot.png')
 def plot():
