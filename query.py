@@ -67,10 +67,8 @@ def get_graph(measure):
         Timestamps.append(entity.Timestamp)
         if (measure == 'temp'):
             Tmps.append(entity.temperature)
-    print(len(Timestamps))
+    
     if(measure == 'press'):
         return (Timestamps, Pressures)
     if(measure == 'temp'):
         return (Timestamps,Tmps)
-
-make_graph('temp')
