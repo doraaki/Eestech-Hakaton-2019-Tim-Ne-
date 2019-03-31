@@ -1,0 +1,23 @@
+body {
+  background-color: ghostwhite;
+}
+h1 {
+    font-family: Arial;
+    border-style: solid;
+    border-color: dodgerblue;
+    border-width: 5px;
+    background-color: white;
+    border-radius: 15px;
+    color: dodgerblue;
+    padding-left: 25px;
+
+}
+h2  {
+    font-family: Arial;
+    color: #8991f4;
+    text-decoration: underline;
+}
+p {
+    font-family: Arial;
+    color: black;
+}

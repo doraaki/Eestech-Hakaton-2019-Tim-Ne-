@@ -2,14 +2,88 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Fantasticne Informacije</title>
+    <title>Pressure</title>
+    <script type="text/javascript" ></script>
   </head>
   <body>
     {% extends "template.html" %}
     {% block content %}
 
+
+
+
+
     <h1> Pressure </h1>
     <p> This page is dedicated to monitoring pressure.</p>
+    <h2> Pressure history: <h2>
+      <button class="button button1" style = "position:relative; left:40px;" onclick="myFunction()"> Show/Hide </button>
+      <div id="myDIV">
+        <figure>
+          <img id="PressurePlot" src="{{ url_for('plot') }}" alt="Pressure" align="middle" width="700">
+        </figure>
+      </div>
+      <button class="button button1" style = "position:relative; left:40px;" onclick="refreshPressGraph()"> Refresh </button>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+<script type="text/javascript">
+setInterval(refreshQuote, 2000); //every 2 seconds
+
+function refreshQuote() {
+  $("#myDIV").load("{{ url_for('press_graph') }}");
+}
+</script>
+
+
+     <h2> Current pressure: <h2>
+
+       <button class="button button1" style = "position:relative; left:40px;" onclick="getPress()"> Display </button>
+
+
+       <script>
+
+           function loadXMLDoc(theURL)
+    {
+        if (window.XMLHttpRequest)
+        {// code for IE7+, Firefox, Chrome, Opera, Safari, SeaMonkey
+            xmlhttp=new XMLHttpRequest();
+        }
+        else
+        {// code for IE6, IE5
+            xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange=function()
+        {
+            if (xmlhttp.readyState==4 && xmlhttp.status==200)
+            {
+                alert(xmlhttp.responseText);
+            }
+        }
+        xmlhttp.open("GET", theURL, false);
+        xmlhttp.send();
+    }
+
+function getPress() {
+    var xmlhttp=false;
+    loadXMLDoc("{{ url_for('press_data') }}");
+    if(xmlhttp==false){document.getElementById("demo").value = "error" }
+    else { document.getElementById("demo").value = xmlhttp.responseText}
+}
+
+function refreshPressGraph() {
+    $("#myDIV").load("{{ url_for('press_graph') }}");
+    //window.open("{{ url_for('press_graph') }}", '_blank') // <- This is what makes it open in a new window.);
+    //return false;
+    //var img = document.getElementById("PressurePlot");
+    //img.src="{{ url_for('plot') }}";
+    //return false;
+    //var xmlhttp=false;
+    //loadXMLDoc("{{ url_for('plot') }}");
+    //if(xmlhttp==false){document.getElementById("demo").value = "error" }
+    //else { document.getElementById("demo").value = xmlhttp.responseText}
+}
+
+</script>
+
     {% endblock %}
   </body>
 </html>

@@ -1,16 +1,76 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
   <head>
     <meta charset="utf-8">
-    <title>Fantasticne Informacije</title>
+    <title>Temperature</title>
   </head>
+
+
   <body>
     {% extends "template.html" %}
     {% block content %}
 
     <h1> Temperature</h1>
     <p> This page is dedicated to monitoring temperature. </p>
+
+    <h2> Temperature history: </h2>
+
+      <button class="button button1" style = "position:relative; left:40px;" onclick="myFunction()"> Show/Hide </button>
+
+
+      <div id="myDIV">
+        <figure>
+          <img src="../static/temp.png" alt="Pressure" align="middle" width="700" >
+        </figure>
+      </div>
+
+    <button class="button button1" style = "position:relative; left:40px;" onclick="getPressGraph()"> Open graph in new tab </button>
+
+      <h2> Current temperature: </h2>
+
+        <button class="button button1" style = "position:relative; left:40px;" onclick="getTemp()"> Display </button>
+
+
+        <script>
+
+          function loadXMLDoc(theURL)
+          {
+           if (window.XMLHttpRequest)
+             {// code for IE7+, Firefox, Chrome, Opera, Safari, SeaMonkey
+               xmlhttp=new XMLHttpRequest();
+             }
+             else
+             {// code for IE6, IE5
+               xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+             }
+             xmlhttp.onreadystatechange=function()
+             {
+               if (xmlhttp.readyState==4 && xmlhttp.status==200)
+               {
+                 alert(xmlhttp.responseText);
+               }
+             }
+             xmlhttp.open("GET", theURL, false);
+             xmlhttp.send();
+          }
+
+          function getTemp() {
+            var xmlhttp=false;
+            loadXMLDoc("{{ url_for('temp_data') }}");
+            if(xmlhttp==false){document.getElementById("demo").value = "error" }
+            else { document.getElementById("demo").value = xmlhttp.responseText}
+          }
+          function getTempGraph() {
+
+          window.open("{{ url_for('temp_graph') }}", '_blank') // <- This is what makes it open in a new window.);
+          return false;
+}
+
+        </script>
     {% endblock %}
+
   </body>
+
 </html>
 

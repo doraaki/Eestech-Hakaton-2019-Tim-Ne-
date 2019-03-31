@@ -53,10 +53,10 @@ def make_graph(measure):
             Pressures.append(entity.temperature)
     if(measure == 'press'):
         plt.plot(Timestamps,Pressures)
-        plt.savefig('press.png')
+        plt.savefig('static/press.png')
     if(measure == 'temp'):
         plt.plot(Timestamps,Tmps)
-        plt.savefig('temp.png')
+        plt.savefig('static/temp.png')
 
 def get_graph(measure):
     if(measure != 'press' and measure != 'temp'):
