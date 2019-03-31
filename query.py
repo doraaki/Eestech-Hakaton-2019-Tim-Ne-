@@ -10,17 +10,9 @@ table_service = TableService(account_name='csb61e6613152abx4a5dxbd0',account_key
 
 #OVAKAV JE FORMAT 2019-03-30T18:48:20.0215023Z
 
-def convertToFuckinGrinich(current_time):
-    ct = list(current_time)
-    hour = int(ct[11] + ct[12]) - 1
-    ct[12] = str(int(hour%10))
-    ct[11] = str(int(hour/10))
-    return "".join(ct)
-
 def get_value(measure):
 
-    current_time = str(datetime.datetime.now().date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=5)).time()) + '0Z'
-    current_time = convertToFuckinGrinich(current_time)
+    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=5)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities=table_service.query_entities('data', filter=query_filter, num_results=1)
@@ -37,8 +29,7 @@ def make_graph(measure):
     if(measure != 'press' and measure != 'temp'):
         return None
 
-    current_time = str(datetime.datetime.now().date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=100)).time()) + '0Z'
-    current_time = convertToFuckinGrinich(current_time)
+    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now()-datetime.timedelta(seconds=100)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities=table_service.query_entities('data', filter=query_filter, num_results=100)
@@ -47,10 +38,10 @@ def make_graph(measure):
     Pressures = []
     for entity in entities:
         if(measure == 'press'):
-            Tmps.append(entity.pressure)
+            Pressures.append(entity.pressure)
         Timestamps.append(entity.Timestamp)
         if(measure == 'temp'):
-            Pressures.append(entity.temperature)
+            Tmps.append(entity.temperature)
     if(measure == 'press'):
         plt.plot(Timestamps,Pressures)
         plt.savefig('static/press.png')
@@ -62,9 +53,7 @@ def get_graph(measure):
     if(measure != 'press' and measure != 'temp'):
         return None
 
-    current_time = str(datetime.datetime.now().date()) + 'T' + str(
-        (datetime.datetime.now() - datetime.timedelta(seconds=100)).time()) + '0Z'
-    current_time = convertToFuckinGrinich(current_time)
+    current_time = str((datetime.datetime.now() - datetime.timedelta(hours=1)).date()) + 'T' + str((datetime.datetime.now() - datetime.timedelta(seconds=100)).time()) + '0Z'
     query_filter = "PartitionKey gt " + '\'' + current_time + '\''
 
     entities = table_service.query_entities('data', filter=query_filter, num_results=100)
@@ -73,10 +62,10 @@ def get_graph(measure):
     Pressures = []
     for entity in entities:
         if (measure == 'press'):
-            Tmps.append(entity.pressure)
+            Pressures.append(entity.pressure)
         Timestamps.append(entity.Timestamp)
         if (measure == 'temp'):
-            Pressures.append(entity.temperature)
+            Tmps.append(entity.temperature)
     if(measure == 'press'):
         return (Timestamps, Pressures)
     if(measure == 'temp'):
