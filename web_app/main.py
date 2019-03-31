@@ -4,14 +4,18 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import random
 import io
+import time
 import sys
 sys.path
 sys.path.append('..')
 import query
 from flask import Flask, render_template, make_response
 
+last_time = time.time()
+curr_time = 0
+query.make_graph('press')
+query.make_graph('temp')
 app = Flask(__name__)
-val = 1
 
 @app.route("/")
 def home():
@@ -36,10 +40,7 @@ def pritisak():
 
 @app.route("/press_graph")
 def press_graph():
-    global val
-    val = val+1
-    query.make_graph('press')
-    return render_template("pressure_graph.html",val=val)
+    return render_template("pressure_graph.html")
 
 @app.route('/plot.png')
 def plot():
@@ -59,7 +60,7 @@ def plot():
 
 @app.route("/temp_graph")
 def temp_graph():
-    query.make_graph('temp')
+    #query.make_graph('temp')
     return render_template("temperature_graph.html")
 
 if __name__ == "__main__":
